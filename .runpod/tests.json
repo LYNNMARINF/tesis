@@ -1,0 +1,20 @@
+{
+  "tests": [
+    {
+      "name": "basic_test",
+      "input": {
+        "prompt": "test",
+        "file": "test.jpg"
+      },
+      "timeout": 10000
+    },
+    {
+      "name": "object_grasping",
+      "input": {
+        "prompt": "grab object",
+        "file": "test2.jpg"
+      },
+      "timeout": 10000
+    }
+  ]
+}

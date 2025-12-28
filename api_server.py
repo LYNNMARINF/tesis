@@ -18,7 +18,7 @@ async def grasp_endpoint(
     max_round: int = Form(4),
     api_file: str = Form('api.key')
 ):
-    # Guardar imagen temporalmente
+    # Save image temporarily
     with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
         shutil.copyfileobj(file.file, tmp)
         tmp_path = tmp.name
@@ -31,7 +31,7 @@ async def grasp_endpoint(
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
     finally:
-        # Limpieza del archivo temporal
+        # Temporary file cleanup
         try:
             import os
             os.remove(tmp_path)

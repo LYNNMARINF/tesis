@@ -1,0 +1,15 @@
+{
+  "title": "Thesis",
+  "description": "Grasping API with FastAPI and GRASP MAS",
+  "type": "serverless",
+  "category": "image",
+  "iconUrl": "https://example.com/icon.png",
+  "config": {
+    "runOn": "CPU",
+    "containerDiskInGB": 20
+  },
+  "env": {
+    "MY_API_KEY": "your-key-here"
+  },
+  "readmeUrl": "https://github.com/LYNNMARINF/tesis/blob/main/README.md"
+}
