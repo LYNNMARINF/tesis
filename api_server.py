@@ -7,9 +7,9 @@ from agents.graspmas import GraspMAS
 
 app = FastAPI()
 
-def run_graspmas(api_file, prompt, image_path, max_round=4):
+async def run_graspmas(api_file, prompt, image_path, max_round=4):
     graspmas = GraspMAS(api_file=api_file, max_round=max_round)
-    return asyncio.run(graspmas.query(prompt, image_path))
+    return await graspmas.query(prompt, image_path)
 
 @app.post("/grasp")
 async def grasp_endpoint(
@@ -23,7 +23,7 @@ async def grasp_endpoint(
         shutil.copyfileobj(file.file, tmp)
         tmp_path = tmp.name
     try:
-        save_path, grasp_pose = run_graspmas(api_file, prompt, tmp_path, max_round)
+        save_path, grasp_pose = await run_graspmas(api_file, prompt, tmp_path, max_round)
         return JSONResponse({
             "save_path": save_path,
             "grasp_pose": grasp_pose

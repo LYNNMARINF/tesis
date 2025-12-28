@@ -5,6 +5,6 @@ app = FastAPI()
 
 @app.post("/process")
 async def process_image(prompt: str = Form(...), file: UploadFile = File(...)):
-    # Aquí procesarías la imagen y el prompt
-    # Por ahora solo devuelve el nombre del archivo y el prompt recibido
+    # Here you would process the image and the prompt
+    # For now it only returns the filename and the received prompt
     return JSONResponse({"filename": file.filename, "prompt": prompt})

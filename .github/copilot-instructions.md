@@ -1,17 +1,38 @@
+
 # Copilot Instructions for AI Coding Agents
 
 ## Project Overview
-This repository appears to be in its initial state, with only a `README.md` and `LICENSE` file present. No source code, configuration, or documentation about architecture, workflows, or conventions is currently available.
+This repository implements a FastAPI-based server for exposing a GRASP (robotic grasping) model as an HTTP API. The service receives an image and a prompt, processes them using the GRASP model, and returns grasping results. The project is designed for deployment on platforms like RunPod using Docker.
 
-## Guidance for AI Agents
-- **Project Structure**: No code or project structure is present yet. Revisit these instructions after code is added.
-- **Workflows**: No build, test, or debug workflows are defined. If you add code, document any new workflows here.
-- **Conventions**: No project-specific conventions or patterns are established. Use standard practices for your chosen language/framework until further documentation is provided.
-- **Dependencies**: No external dependencies or integrations are defined.
+## Key Files and Structure
+- `main.py`: (Optional) Entry point for FastAPI or other scripts.
+- `api_server.py`: Main FastAPI app exposing the `/grasp` endpoint. Handles image upload, prompt, and calls the GRASP model.
+- `requirements.txt`: Python dependencies (FastAPI, Uvicorn, etc.).
+- `Dockerfile`: Containerizes the app for deployment.
+- `.github/copilot-instructions.md`: This file.
 
-## Next Steps
-- Update this file as the project evolves, especially when adding source code, configuration, or documentation.
-- Reference key files and directories as they are created to help future contributors and AI agents understand the project.
+## Developer Workflows
+- **Local development:**
+	1. Install dependencies: `pip install -r requirements.txt`
+	2. Run the server: `uvicorn api_server:app --reload --host 0.0.0.0 --port 8080`
+	3. Test the `/grasp` endpoint with an HTTP client (e.g., curl, Postman, or Python requests).
+- **Docker/Cloud deployment:**
+	1. Build image: `docker build -t grasp-api .`
+	2. Run: `docker run -p 8080:8080 grasp-api`
+	3. Deploy to RunPod: Import GitHub repo and follow RunPod’s deployment flow.
+
+## Project-Specific Patterns
+- The endpoint `/grasp` expects a multipart/form-data POST with fields:
+	- `prompt`: string
+	- `file`: image file
+	- (optional) `max_round`, `api_file`
+- Uploaded images are saved as temporary files and deleted after processing.
+- The GRASP model is invoked via the `GraspMAS` class (see `api_server.py`).
+- Avoid using `asyncio.run()` inside async endpoints; use `await` for coroutines.
+
+## Integration Points
+- Designed for serverless or pod-based deployment (e.g., RunPod).
+- Expects the GRASP model and its dependencies to be available in the container.
 
 ---
-*Last updated: December 27, 2025*
+*Last updated: December 28, 2025*
