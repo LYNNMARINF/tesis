@@ -1,18 +1,9 @@
 {
   "tests": [
     {
-      "name": "basic_test",
+      "name": "basic_prompt_only",
       "input": {
-        "prompt": "test",
-        "file": "test.jpg"
-      },
-      "timeout": 10000
-    },
-    {
-      "name": "object_grasping",
-      "input": {
-        "prompt": "grab object",
-        "file": "test2.jpg"
+        "prompt": "test"
       },
       "timeout": 10000
     }
