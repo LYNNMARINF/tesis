@@ -3,13 +3,15 @@ from fastapi.responses import JSONResponse
 import shutil
 import tempfile
 import asyncio
-from agents.graspmas import GraspMAS
+
+import httpx
+
 
 app = FastAPI()
 
-async def run_graspmas(api_file, prompt, image_path, max_round=4):
-    graspmas = GraspMAS(api_file=api_file, max_round=max_round)
-    return await graspmas.query(prompt, image_path)
+
+# Set your pod's GRASP API endpoint URL here
+POD_GRASP_URL = "http://69.30.85.49:8080/grasp"  # <-- Pod public IP
 
 @app.post("/grasp")
 async def grasp_endpoint(
@@ -23,11 +25,13 @@ async def grasp_endpoint(
         shutil.copyfileobj(file.file, tmp)
         tmp_path = tmp.name
     try:
-        save_path, grasp_pose = await run_graspmas(api_file, prompt, tmp_path, max_round)
-        return JSONResponse({
-            "save_path": save_path,
-            "grasp_pose": grasp_pose
-        })
+        # Forward the image and prompt to the remote pod
+        async with httpx.AsyncClient() as client:
+            with open(tmp_path, "rb") as img_file:
+                files = {"file": (file.filename, img_file, file.content_type)}
+                data = {"prompt": prompt, "max_round": str(max_round), "api_file": api_file}
+                response = await client.post(POD_GRASP_URL, data=data, files=files)
+        return JSONResponse(response.json(), status_code=response.status_code)
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
     finally:
